@@ -44,6 +44,11 @@ Para a primeira versão do sistema devemos implementar apenas 3 operações: dep
 - No final deve ser exibido o saldo atual da conta.
 - Se nenhuma operação foi realizada, deve ser exibida a mensagem "Nenhuma operação realizada."
 
+**Adição da data e hora**
+- Estabelecer um limite de 10 transações diárias para uma conta
+- Se o usuário tentar fazer uma transação após atingir o limite, deve ser informado que ele excedeu o número de transações permitidas para aquele dia.
+- Mostre no extrato, a data e hora de todas as transações.
+
 <br>
 
 ## 🚀 Como executar o projeto

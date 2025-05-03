@@ -1,3 +1,5 @@
+import datetime
+
 menu = """
 
 [d] Depositar
@@ -7,60 +9,57 @@ menu = """
 
 => """
 
-saldo = 0
-limite = 500
-extrato = ""
-numero_saques = 0
-LIMITE_SAQUES = 3
+balance = 0
+limit = 500
+statement = ""
+withdrawals_number = 0
+WITHDRAWS_LIMIT = 3
+transactions_number = 0
+TRANSACTIONS_LIMIT = 10
 
 while True:
 
     option = input(menu)
 
+    if transactions_number >= TRANSACTIONS_LIMIT and option != "e" and option != "q":
+        print("Limite de transações diárias atingido.")
+        continue
+
+    date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
     if option == "d":
-        valor = float(input("Informe o valor do depósito: "))
-
-        if valor > 0:
-            saldo += valor
-            extrato += f"Depósito: R$ {valor:.2f}\n"
-
-        else:
-            print("Operação falhou! O valor informado é inválido.")
+        value = float(input("Informe o valor do depósito: "))
+        balance += value
+        statement += f"{date} => Depósito: R$ {value:.2f}\n"
+        transactions_number += 1
 
     elif option == "s":
-        valor = float(input("Informe o valor do saque: "))
+        if withdrawals_number >= WITHDRAWS_LIMIT:
+            print("Limite de saques diários atingido.")
+            continue
 
-        excedeu_saldo = valor > saldo
+        value = float(input("Informe o valor do saque: "))
 
-        excedeu_limite = valor > limite
+        if value > limit:
+            print("Limite de saque excedido.")
+            continue
 
-        excedeu_saques = numero_saques >= LIMITE_SAQUES
-
-        if excedeu_saldo:
-            print("Operação falhou! Você não tem saldo suficiente.")
-
-        elif excedeu_limite:
-            print("Operação falhou! O valor do saque excede o limite.")
-
-        elif excedeu_saques:
-            print("Operação falhou! Número máximo de saques excedido.")
-
-        elif valor > 0:
-            saldo -= valor
-            extrato += f"Saque: R$ {valor:.2f}\n"
-            numero_saques += 1
-
+        if balance >= value:
+            balance -= value
+            statement += f"{date} => Saque: R$ {value:.2f}\n"
+            withdrawals_number += 1
+            transactions_number += 1
         else:
-            print("Operação falhou! O valor informado é inválido.")
+            print("Saldo insuficiente")
 
     elif option == "e":
         print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"\nSaldo: R$ {saldo:.2f}")
+        print("Não foram realizadas movimentações" if not statement else statement)
+        print(f"\ndSaldo: R$ {balance:.2f}")
         print("==========================================")
 
     elif option == "q":
         break
 
     else:
-        print("Operação inválida, por favor selecione novamente a operação desejada.")
+        print("Operação inválida, por favor selecione novamente a operação desejada.")
